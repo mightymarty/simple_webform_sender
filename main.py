@@ -2,6 +2,7 @@ import boto3
 import json
 import uuid
 import requests
+import os
 from datetime import datetime
 
 # Initialize AWS resources
@@ -9,12 +10,17 @@ dynamodb = boto3.resource('dynamodb')
 sqs = boto3.client('sqs')
 
 # Constants
-RECAPTCHA_SECRET_KEY = "your-google-recaptcha-secret-key"  # Replace with 
+RECAPTCHA_SECRET_KEY = os.environ['RECAPTCHA_SECRET_KEY']  # Replace with 
 your key
-DYNAMO_TABLE_NAME = "YourDynamoDBTableName"  # Replace with your table 
+DYNAMO_TABLE_NAME = os.environ['DYNAMO_TABLE_NAME']  # Replace with 
+your table 
 name
+REGION = os.environ['AWS_REGION']
+AWS_ACCOUNT_ID = os.environ['AWS_ACCOUNT_ID']
+SQS_QUEUE_NAME = os.environ['SQS_QUEUE_NAME']
+
 SQS_QUEUE_URL = 
-"https://sqs.YOUR_REGION.amazonaws.com/YOUR_ACCOUNT_ID/YOUR_QUEUE_NAME"  # 
+"https://sqs.{region}.amazonaws.com/{account}/{queue}".format(region=REGION, account=AWS_ACCOUNT_ID, queue=SQS_QUEUE_NAME)  # 
 Replace with your SQS URL
 
 def lambda_handler(event, context):
